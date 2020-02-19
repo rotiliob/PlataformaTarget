@@ -30,9 +30,9 @@ public class Cart {
     @Column(name = "AMOUNT")
     private Double amount;
 
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private Set<Product> products = new HashSet<>();
 
-    @OneToMany(mappedBy = "cart")
+    @ManyToOne
     private Coupon coupon;
 }

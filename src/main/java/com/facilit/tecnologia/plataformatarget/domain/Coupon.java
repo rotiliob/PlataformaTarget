@@ -21,16 +21,12 @@ public class Coupon {
     @Column(name = "NAME")
     private String name;
 
-    @Column(name = "CART")
-    @ManyToOne
-    @JoinTable(name = "CART_ID")
-    private Cart cart;
+    @OneToMany(mappedBy = "coupon", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private Set<Cart> carts = new HashSet<>();
 
-    @Column(name = "AFFILIATE")
-    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
-    @JoinTable(name = "AFFILIATE_COUPON",
-    joinColumns = {@JoinColumn(name = "COUPON_ID")},
-    inverseJoinColumns = {@JoinColumn(name = "AFFILIATE_ID")})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "AFFILIATE_COUPON", joinColumns = {@JoinColumn(name = "COUPON_ID")},
+            inverseJoinColumns = {@JoinColumn(name = "AFFILIATE_ID")})
     private Set<Affiliate> affiliates = new HashSet<>();
 
 }

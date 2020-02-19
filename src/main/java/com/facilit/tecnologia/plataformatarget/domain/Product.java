@@ -21,9 +21,7 @@ public class Product {
     @Column(name = "DESCRIPTION")
     private String description;
 
-    @Column(name = "CART")
-    @ManyToOne
-    @JoinTable(name = "CART_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
     private Cart cart;
 
 }
