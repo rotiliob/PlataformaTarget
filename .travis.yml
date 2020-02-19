@@ -7,7 +7,6 @@ jdk: oraclejdk8
 
 before_install:
   - chmod +x gradlew
-  - chmod +x ./gradlew build connectedCheck
   - ./gradlew build --scan -s
   - ./gradlew dependencies || true
 
