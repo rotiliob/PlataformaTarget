@@ -10,7 +10,6 @@ before_install:
   - ./gradlew dependencies || true
 
 script:
-  - chmod +x ./gradlew build connectedCheck
   - ./gradlew build --scan -s
 
 before_cache:
