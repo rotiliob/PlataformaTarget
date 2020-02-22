@@ -15,6 +15,7 @@ public class Affiliate {
 
     @Id
     @Column(name = "COUPON_ID")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "NAME")

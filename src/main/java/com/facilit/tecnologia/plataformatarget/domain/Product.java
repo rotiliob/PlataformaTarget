@@ -13,6 +13,7 @@ import javax.persistence.*;
 public class Product {
     @Id
     @Column(name = "PRODUCT_ID")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "PRICE")
@@ -21,8 +22,5 @@ public class Product {
     @Column(name = "DESCRIPTION")
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference
-    private Cart cart;
 
 }

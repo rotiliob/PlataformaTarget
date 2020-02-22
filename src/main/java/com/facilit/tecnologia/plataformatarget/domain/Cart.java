@@ -5,9 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -17,42 +15,47 @@ public class Cart {
 
     @Id
     @Column(name = "CART_ID")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "PRODUCT_QUANTITY")
-    private int productQuantity;
-
-    @Column(name = "QUANTITY_PER_PRODUCT")
-    private int quantityPerProduct;
-
     @Column(name = "DISCOUNT")
-    private Double discount;
+    private Double discountValue;
 
     @Column(name = "AMOUNT")
     private Double amount;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    @JsonManagedReference
-    private Set<Product> products = new HashSet<>();
+    @OneToMany(mappedBy = "cart")
+    private List<ProductCart> cartProducts = new ArrayList<>();
 
     @ManyToOne
-    private Coupon coupon;
+    private Discount coupon;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Cart cart = (Cart) o;
-        return productQuantity == cart.productQuantity &&
-                quantityPerProduct == cart.quantityPerProduct &&
-                Objects.equals(id, cart.id) &&
-                Objects.equals(discount, cart.discount) &&
+        return                 Objects.equals(id, cart.id) &&
+                Objects.equals(discountValue, cart.discountValue) &&
                 Objects.equals(amount, cart.amount) &&
                 Objects.equals(coupon, cart.coupon);
     }
 
+    public Cart addProduct(Product product){
+
+        getCartProducts().forEach(productCart -> {
+            if(productCart.getProduct().equals(product)){
+                int qtd = productCart.getQuantity() +1;
+                productCart.setQuantity(qtd);
+            }else{
+                getCartProducts().add(new ProductCart(product));
+            }
+        });
+        return this;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(id, productQuantity, quantityPerProduct, discount, amount, coupon);
+        return Objects.hash(id, discountValue, amount, coupon);
     }
 }
