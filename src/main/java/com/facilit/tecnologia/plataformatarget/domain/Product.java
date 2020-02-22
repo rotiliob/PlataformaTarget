@@ -1,5 +1,6 @@
 package com.facilit.tecnologia.plataformatarget.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,16 +13,16 @@ import javax.persistence.*;
 public class Product {
     @Id
     @Column(name = "PRODUCT_ID")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PRODUCT_SEQ")
     private Long id;
 
     @Column(name = "PRICE")
-    private String price;
+    private Double price;
 
     @Column(name = "DESCRIPTION")
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     private Cart cart;
 
 }

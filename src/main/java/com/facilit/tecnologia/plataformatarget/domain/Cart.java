@@ -1,10 +1,12 @@
 package com.facilit.tecnologia.plataformatarget.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -15,7 +17,6 @@ public class Cart {
 
     @Id
     @Column(name = "CART_ID")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CART_SEQ")
     private Long id;
 
     @Column(name = "PRODUCT_QUANTITY")
@@ -31,8 +32,27 @@ public class Cart {
     private Double amount;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @JsonManagedReference
     private Set<Product> products = new HashSet<>();
 
     @ManyToOne
     private Coupon coupon;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cart cart = (Cart) o;
+        return productQuantity == cart.productQuantity &&
+                quantityPerProduct == cart.quantityPerProduct &&
+                Objects.equals(id, cart.id) &&
+                Objects.equals(discount, cart.discount) &&
+                Objects.equals(amount, cart.amount) &&
+                Objects.equals(coupon, cart.coupon);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, productQuantity, quantityPerProduct, discount, amount, coupon);
+    }
 }

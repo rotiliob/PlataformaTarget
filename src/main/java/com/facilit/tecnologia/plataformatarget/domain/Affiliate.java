@@ -15,7 +15,6 @@ public class Affiliate {
 
     @Id
     @Column(name = "COUPON_ID")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COUPON_SEQ")
     private Long id;
 
     @Column(name = "NAME")
@@ -27,6 +26,6 @@ public class Affiliate {
     @Column(name = "EMAIL")
     private String email;
 
-    @ManyToMany(mappedBy = "affiliates", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "affiliates", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private Set<Coupon> coupons = new HashSet<>();
 }

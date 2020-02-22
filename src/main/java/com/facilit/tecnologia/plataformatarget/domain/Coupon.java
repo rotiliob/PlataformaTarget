@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -15,7 +16,6 @@ public class Coupon {
 
     @Id
     @Column(name = "COUPON_ID")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COUPON_SEQ")
     private Long id;
 
     @Column(name = "NAME")
@@ -24,9 +24,22 @@ public class Coupon {
     @OneToMany(mappedBy = "coupon", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private Set<Cart> carts = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "AFFILIATE_COUPON", joinColumns = {@JoinColumn(name = "COUPON_ID")},
             inverseJoinColumns = {@JoinColumn(name = "AFFILIATE_ID")})
     private Set<Affiliate> affiliates = new HashSet<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Coupon coupon = (Coupon) o;
+        return Objects.equals(id, coupon.id) &&
+                Objects.equals(name, coupon.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
+    }
 }
